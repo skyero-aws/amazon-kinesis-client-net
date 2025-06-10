@@ -29,6 +29,8 @@ jobs:
     steps:
       - name: Checkout working directory
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -96,6 +98,7 @@ jobs:
 #        env:
 #          PR_URL: ${{github.event.pull_request.html_url}}
 #          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
 
 #      - name: Enable auto-merge for Dependabot PRs
 #        if: steps.metadata.outputs.update-type != 'version-update:semver-major'
