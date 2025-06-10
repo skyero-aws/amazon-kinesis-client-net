@@ -10,8 +10,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Xml.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
 using CommandLine;
 
 namespace Amazon.Kinesis.ClientLibrary.Bootstrap
@@ -63,23 +61,12 @@ namespace Amazon.Kinesis.ClientLibrary.Bootstrap
             }
 
             String destination = Path.Combine(folder, FileName);
-            if (!File.Exists(destination)) {
-                using var client = new HttpClient();
-                client.DefaultRequestHeaders.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
-
-                    try {
-                        Console.Error.WriteLine(Url + " --> " + destination);
-                        using var response = client.GetAsync(new Uri(Url)).GetAwaiter().GetResult();
-                        response.EnsureSuccessStatusCode();
-
-                        using var fs = new FileStream(destination, FileMode.Create);
-                        response.Content.CopyToAsync(fs).GetAwaiter().GetResult();
-                        return;
-                    }
-                    catch (HttpRequestException ex)
-                    {
-                        throw new Exception($"Failed to download {FileName}: {ex.Message}", ex);
-                    }
+            if (!File.Exists(destination))
+                        {
+                            var client = new WebClient();
+                            client.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
+                            Console.Error.WriteLine(Url + " --> " + destination);
+                            client.DownloadFile(new Uri(Url), destination);
             }
         }
 
@@ -96,7 +83,7 @@ namespace Amazon.Kinesis.ClientLibrary.Bootstrap
                 urlParts.Add(ArtifactId);
                 urlParts.Add(Version);
                 urlParts.Add(FileName);
-                return "https://repo1.maven.org/maven2/" + String.Join("/", urlParts);
+                return "https://search.maven.org/remotecontent?filepath=" + String.Join("/", urlParts);
             }
         }
     }
@@ -232,8 +219,6 @@ namespace Amazon.Kinesis.ClientLibrary.Bootstrap
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error finding Java: {ex.Message}");
-                return null;
             }
             //TODO find away to read from registery on different OSs
             // Failing that, look in the registry.
@@ -253,7 +238,8 @@ namespace Amazon.Kinesis.ClientLibrary.Bootstrap
             //        }
             //    }
             //}
-            //return null;
+
+            return null;
         }
 
         public static void Main(string[] args)
