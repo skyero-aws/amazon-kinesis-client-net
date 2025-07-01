@@ -137,11 +137,23 @@ jobs:
         env:
           STREAM_NAME: ${{ env.STREAM_NAME }}
 
-#      - name: Run KCL Producer
-#        run: |
-#          cd SampleProducer
-#          dotnet run
-#
+      # Run sample KCL application
+      - name: Start KCL application
+        run: |
+          chmod +x .github/scripts/start_kcl.sh
+          .github/scripts/start_kcl.sh
+        env:
+          RUNNER_OS: ${{ matrix.os }}
+          STREAM_NAME: ${{ env.STREAM_NAME }}
+
+      # Check and verify results of KCL test
+      - name: Verify KCL Functionality
+        run: |
+          chmod +x .github/scripts/verify_kcl.sh
+          .github/scripts/verify_kcl.sh
+        env:
+          APP_NAME: ${{ env.APP_NAME }}
+
 #      - name: Run KCL consumer (ubuntu and windows)
 #        if: ${{ matrix.os != 'macOS-latest'}}
 #        run: |
