@@ -50,19 +50,11 @@ jobs:
         shell: bash
 
     # Initialize matrix based on PR labels (more-tests label runs more tests)
-#    strategy:
-#      fail-fast: false
-#      matrix:
-#        python-version: ${{ github.event_name == 'pull_request_target' && contains(github.event.pull_request.labels.*.name, 'more-tests') && fromJSON('["3.9", "3.11"]') || fromJSON('["3.9"]') }}
-#        jdk-version: ${{ github.event_name == 'pull_request_target' && contains(github.event.pull_request.labels.*.name, 'more-tests') && fromJSON('["8", "11", "17", "21", "24"]') || fromJSON('["8", "11"]') }}
-#        os: [ ubuntu-latest, macOS-latest, windows-latest ]
-
-    # Initialize matrix based on PR labels (more-tests label runs more tests)
     strategy:
       fail-fast: false
       matrix:
         node-version: [ "6.0.x" ]
-        jdk-version: [ "8", "11", "17", "21", "24" ]
+        jdk-version: ${{ github.event_name == 'pull_request_target' && contains(github.event.pull_request.labels.*.name, 'more-tests') && fromJSON('["8", "11", "17", "21", "24"]') || fromJSON('["8", "11"]') }}
         os: [ ubuntu-latest, macOS-latest, windows-latest ]
 
     steps:
@@ -153,19 +145,6 @@ jobs:
           .github/scripts/verify_kcl.sh
         env:
           APP_NAME: ${{ env.APP_NAME }}
-
-#      - name: Run KCL consumer (ubuntu and windows)
-#        if: ${{ matrix.os != 'macOS-latest'}}
-#        run: |
-#          cd SampleConsumer
-#          timeout 45 dotnet run --project ../Bootstrap/Bootstrap.csproj --properties kcl.properties --execute || status="$?"; if (( status == 124 )); then exit 0; else exit 1; fi; exit "$status"
-#
-#      - name: Run KCL consumer (macOS)
-#        if: ${{ matrix.os == 'macOS-latest'}}
-#        run: |
-#          brew install coreutils
-#          cd SampleConsumer
-#          gtimeout 45 dotnet run --project ../Bootstrap/Bootstrap.csproj --properties kcl.properties --execute || status="$?"; if (( status == 124 )); then exit 0; else exit 1; fi; exit "$status"
 
       # Clean up all existing Streams and DDB tables
       - name: Clean up Kinesis Stream and DynamoDB table
