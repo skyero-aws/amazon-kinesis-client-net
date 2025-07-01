@@ -4,9 +4,9 @@
 name: Sample Run Tests and Dependabot
 on:
   push:
-    branches: [ master, sample-improve ]
+    branches: [ master ]
   pull_request_target:
-    branches: [ master, sample-improve ]
+    branches: [ master ]
     types: [opened, synchronize, reopened, unlabeled]
 
 concurrency:
