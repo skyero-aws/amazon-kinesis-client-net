@@ -4,9 +4,9 @@
 name: Sample Run Tests and Dependabot
 on:
   push:
-    branches: [ master, sample-improve ]
+    branches: [ master ]
   pull_request_target:
-    branches: [ master, sample-improve ]
+    branches: [ master ]
     types: [opened, synchronize, reopened, unlabeled]
 
 concurrency:
@@ -54,8 +54,7 @@ jobs:
       fail-fast: false
       matrix:
         dotnet-version: [ "6.0.x" ]
-#        jdk-version: ${{ github.event_name == 'pull_request_target' && contains(github.event.pull_request.labels.*.name, 'more-tests') && fromJSON('["8", "11", "17", "21", "24"]') || fromJSON('["8", "11"]') }}
-        jdk-version: [ 17, 21, 24 ]
+        jdk-version: ${{ github.event_name == 'pull_request_target' && contains(github.event.pull_request.labels.*.name, 'more-tests') && fromJSON('["8", "11", "17", "21", "24"]') || fromJSON('["8", "11"]') }}
         os: [ ubuntu-latest, macOS-latest, windows-latest ]
 
     steps:
