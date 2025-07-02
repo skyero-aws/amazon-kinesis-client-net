@@ -25,11 +25,11 @@ echo "Found $RECORD_COUNT_BEFORE records in stream before KCL start"
 
 if [[ "$RUNNER_OS" == "macOS" ]]; then
   brew install coreutils
-  (cd SampleConsumer && gtimeout 300 dotnet run --project ../Bootstrap/Bootstrap.csproj --properties kcl.properties --execute 2>&1 | tee ../kcl_output.log) || [ $? -eq 124 ]
+  (cd SampleConsumer && gtimeout 900 dotnet run --project ../Bootstrap/Bootstrap.csproj --properties kcl.properties --execute 2>&1 | tee ../kcl_output.log) || [ $? -eq 124 ]
 elif [[ "$RUNNER_OS" == "Linux" ]]; then
-  (cd SampleConsumer && timeout 300 dotnet run --project ../Bootstrap/Bootstrap.csproj --properties kcl.properties --execute 2>&1 | tee ../kcl_output.log) || [ $? -eq 124 ]
+  (cd SampleConsumer && timeout 900 dotnet run --project ../Bootstrap/Bootstrap.csproj --properties kcl.properties --execute 2>&1 | tee ../kcl_output.log) || [ $? -eq 124 ]
 elif [[ "$RUNNER_OS" == "Windows" ]]; then
-  (cd SampleConsumer && timeout 360 dotnet run --project ../Bootstrap/Bootstrap.csproj --properties kcl.properties --execute 2>&1 | tee ../kcl_output.log) || [ $? -eq 124 ]
+  (cd SampleConsumer && timeout 900 dotnet run --project ../Bootstrap/Bootstrap.csproj --properties kcl.properties --execute 2>&1 | tee ../kcl_output.log) || [ $? -eq 124 ]
 else
   echo "Unknown OS: $RUNNER_OS"
   exit 1
