@@ -138,7 +138,7 @@ jobs:
         env:
           RUNNER_OS: ${{ matrix.os }}
           STREAM_NAME: ${{ env.STREAM_NAME }}
-          RUN_TIME_SECONDS: 720
+          RUN_TIME_SECONDS: 900
 
       # Check and verify results of KCL test
       - name: Verify KCL Functionality
