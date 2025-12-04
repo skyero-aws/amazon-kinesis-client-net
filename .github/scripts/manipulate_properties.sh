@@ -19,7 +19,7 @@ if [[ "$RUNNER_OS" == "macOS" ]]; then
 elif [[ "$RUNNER_OS" == "Linux" || "$RUNNER_OS" == "Windows" ]]; then
   sed -i "s/STREAM_NAME_PLACEHOLDER/$STREAM_NAME/g" $SAMPLE_PROPERTIES
   sed -i "s/APP_NAME_PLACEHOLDER/$APP_NAME/g" $SAMPLE_PROPERTIES
-  sed -i "" "s/EXECUTABLE_NAME_PLACEHOLDER/dotnet bin\/SampleConsumer.dll/g" $SAMPLE_PROPERTIES
+  sed -i "s/EXECUTABLE_NAME_PLACEHOLDER/dotnet bin\/SampleConsumer.dll/g" $SAMPLE_PROPERTIES
   sed -i "51s/kclnetsample/$STREAM_NAME/g" SampleProducer/SampleProducer.cs
 else
   echo "Unknown OS: $RUNNER_OS"
